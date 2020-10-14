@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Room:</strong>
+  <%= @room.id %>
+</p>
+
+<p>
+  <strong>Room name:</strong>
+  <%= @room.name %>
+</p>
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Line name</th>
+      <th>Thumbnail</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @array.each do |profile| %>
+      <tr>
+        <td><%= profile.name %></td>
+        <td><%= profile.line_name %></td>
+        <td><%= profile.thumbnail %></td>
+        <td><%= profile.user_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Edit', edit_room_path(@room) %> |
+<%= link_to 'Back', rooms_path %>
