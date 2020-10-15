@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :schedules
   resources :relations
   resources :rooms
   resources :profiles #scaffoldでつくるとこうなる。この記述をすることでユーザー管理機能にアクセスすることができるようになります。
