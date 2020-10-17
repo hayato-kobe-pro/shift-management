@@ -1,5 +1,6 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /schedules
   # GET /schedules.json
@@ -14,11 +15,17 @@ class SchedulesController < ApplicationController
 
   # GET /schedules/new
   def new
-    @schedule = Schedule.new(:user_id => current_user.id)
+    @schedule = Schedule.new
+    @schedule = Schedule.find_or_create_by(:user_id => current_user.id)
+    redirect_to edit_schedule_url(@schedule)
   end
 
   # GET /schedules/1/edit
   def edit
+    user = Profile.find_by(:user_id => current_user.id)
+    if @schedule.user_id != user.user_id
+      raise ActionController::RoutingError.new("Not authorized")
+    end
   end
 
   # POST /schedules

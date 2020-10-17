@@ -11,10 +11,10 @@ class RoomsController < ApplicationController
   # GET /rooms/1.json
   def show
     @relations = Relation.where(room_id: params[:id])
-    @array = []
+    @name_lists = []
     @relations.each do |relation|
       key = relation.user_id
-      @array.push(Profile.find_by(user_id: key))
+      @name_lists.push(Profile.find_by(user_id: key))
     end
   end
 
@@ -79,3 +79,8 @@ class RoomsController < ApplicationController
     params.require(:room).permit(:room_id, :room_name)
   end
 end
+
+
+
+
+
