@@ -11,24 +11,52 @@
 </p>
 
 
+<table border="1" >
+  <thead>
+    <tr>
+      <th></th>
+      <th>日付</th>
+    </tr>
+  </thead>
+</table>
 
-<table>
+
+<table border="1">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Line name</th>
-      <th>Thumbnail</th>
-      <th colspan="3"></th>
+      <th>長</th>
+      <th>低</th>
+      <th>高</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @name_lists.each do |profile| %>
+    <% @users.each do |user| %>
       <tr>
-        <td><%= profile.name %></td>
-        <td><%= profile.line_name %></td>
-        <td><%= profile.thumbnail %></td>
-        <td><%= profile.user_id %></td>
+        <td><%= user.name %></td>
+        <% if user.start_time <= 16 %>
+        <td>◯</td>
+        <%else%>
+         <td></td>
+        <% end %>
+         <% if user.start_time <= 17 && user.end_time >= 18 %>
+        <td>◯</td>
+        <%else%>
+         <td></td>
+        <% end %>
+        <% if user.start_time <= 18 && user.end_time >= 19 %>
+        <td>◯</td>
+        <%else%>
+         <td></td>
+        <% end %>
+        
+
+
+
+
+        
+        
       </tr>
     <% end %>
   </tbody>
