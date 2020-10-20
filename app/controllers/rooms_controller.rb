@@ -10,12 +10,24 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
-    @relations = Relation.where(room_id: params[:id])
-    @array = []
-    @relations.each do |relation|
-      key = relation.user_id
-      @array.push(Profile.find_by(user_id: key))
+    
+    # @schedules = Schedule.all
+    # @schedules.each do |schedule|
+    #   print("===========")
+    #   print(schedule.start_time.hour)
+    # end
+
+    @users = User.joins(:relations, :schedule).select('users.name, relations.room_id, schedules.*').where(relations: { room_id: params[:id] })
+    
+    @users.each do |user|
+        user.start_time = Time.parse(user.start_time).hour 
+        user.end_time = Time.parse(user.end_time).hour  
     end
+      
+
+    
+
+
   end
 
   # GET /rooms/new
@@ -79,3 +91,8 @@ class RoomsController < ApplicationController
     params.require(:room).permit(:room_id, :room_name)
   end
 end
+
+
+
+
+

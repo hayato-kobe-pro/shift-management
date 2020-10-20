@@ -5,6 +5,7 @@ class ProfilesController < ApplicationController
   # GET /profiles.json
   def index
     @profiles = Profile.all
+    @current_user =  Profile.find_or_create_by(:user_id => current_user.id).user_id
   end
 
   # GET /profiles/1
@@ -17,8 +18,6 @@ class ProfilesController < ApplicationController
    
     @profile = Profile.new
     @profile = Profile.find_or_create_by(:user_id => current_user.id)
-    print("***********************************")
-    print(@profile)
     redirect_to edit_profile_url(@profile)
     
   end
