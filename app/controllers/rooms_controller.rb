@@ -43,7 +43,6 @@ class RoomsController < ApplicationController
   # POST /rooms.json
   def create
     @room = Room.new(room_params)
-
     respond_to do |format|
       if @room.save
         format.html { redirect_to @room, notice: "Room was successfully created." }
@@ -88,7 +87,7 @@ class RoomsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def room_params
-    params.require(:room).permit(:room_id, :room_name)
+    params.require(:room).permit(:room_id, :name)
   end
 end
 

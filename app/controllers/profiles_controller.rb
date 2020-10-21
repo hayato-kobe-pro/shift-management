@@ -24,9 +24,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/1/edit
   def edit
-    @rooms = Room.all
     id = Profile.find_by(:user_id => current_user.id)
-    @room_id = Relation.find_by(user_id: id.user_id)
     if @profile.user_id != current_user.id
       raise ActionController::RoutingError.new("Not authorized")
     end
@@ -51,20 +49,12 @@ class ProfilesController < ApplicationController
   # PATCH/PUT /profiles/1
   # PATCH/PUT /profiles/1.json
   def update
-    @relation = Relation.new
-    @profile.update(profile_params)
     respond_to do |format|
-      if !params[:room_ids].nil? 
-        room_id = params[:room_ids][0]
-        user_id = params[:profile][:user_id]
-        if !Relation.find_by(user_id: user_id).nil? 
-          Relation.find_by(user_id).destroy
-        end
-        @relation.update({ "room_id" => room_id, "user_id" => user_id })
+        if @profile.update(profile_params)
         format.html { redirect_to @profile, notice: 'Profile was successfully updated.' }
         format.json { render :show, status: :ok, location: @profile }
       else
-        format.html { redirect_to edit_profile_url(@profile) }
+        format.html { render :edit }
         format.json { render json: @profile.errors, status: :unprocessable_entity }
       end
     end

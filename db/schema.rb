@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 2020_10_14_051106) do
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer "user_id"
+    t.integer "room_id"
+    t.integer "clone_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -56,4 +58,3 @@ ActiveRecord::Schema.define(version: 2020_10_14_051106) do
   end
 
 end
-

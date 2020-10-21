@@ -25,7 +25,22 @@
     <%= form.hidden_field :user_id %>
   </div>
 
+  <div class="field">
+    <%= form.label :clone_id %>
+    <%= form.number_field :clone_id %>
+  </div>
+
+
+  <% @rooms.each do |room| %>
+    <%= room.name %>
+    <% if room.id == @room_id&.room_id then %>
+      <%= check_box_tag 'room_ids[]', room.id, checked:true -%>
+    <% else %>
+      <%= check_box_tag 'room_ids[]', room.id -%>
+    <% end %>
+  <% end %>
+
   <div class="actions">
     <%= form.submit %>
-  </div>
+  </div>  
 <% end %>
