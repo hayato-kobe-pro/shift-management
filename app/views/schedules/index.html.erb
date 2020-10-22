@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Start time</th>
-      <th>End time</th>
       <th>User</th>
       <th>Room</th>
       <th>Clone</th>
@@ -18,7 +17,6 @@
     <% @schedules.each do |schedule| %>
       <tr>
         <td><%= schedule.start_time %></td>
-        <td><%= schedule.end_time %></td>
         <td><%= schedule.user_id %></td>
         <td><%= schedule&.room_id %></td>
         <td><%= schedule.clone_id %></td>

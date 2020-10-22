@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 2020_10_14_051106) do
 
   create_table "schedules", force: :cascade do |t|
     t.datetime "start_time"
-    t.datetime "end_time"
     t.integer "user_id"
     t.integer "room_id"
     t.integer "clone_id"

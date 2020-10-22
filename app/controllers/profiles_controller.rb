@@ -33,6 +33,7 @@ class ProfilesController < ApplicationController
   # POST /profiles
   # POST /profiles.json
   def create
+    
     @profile = Profile.new(profile_params)
 
     respond_to do |format|

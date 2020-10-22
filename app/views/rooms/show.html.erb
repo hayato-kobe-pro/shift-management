@@ -32,34 +32,9 @@
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-        <% if user.start_time <= 16 %>
-        <td>◯</td>
-        <%else%>
-         <td></td>
-        <% end %>
-         <% if user.start_time <= 17 && user.end_time >= 18 %>
-        <td>◯</td>
-        <%else%>
-         <td></td>
-        <% end %>
-        <% if user.start_time <= 18 && user.end_time >= 19 %>
-        <td>◯</td>
-        <%else%>
-         <td></td>
-        <% end %>
-        
-
-
-
-
-        
-        
-      </tr>
-    <% end %>
+  
   </tbody>
+
 </table>
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
