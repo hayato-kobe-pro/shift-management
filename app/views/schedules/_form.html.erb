@@ -13,16 +13,18 @@
 
   <div class="field">
     <%= form.label :start_time %>
-    <%= form.datetime_select :start_time %>
+    <%= raw sprintf(form.datetime_select( :start_time ,{:use_month_numbers  => true,
+    minute_step: 10,
+     date_separator: '%s',
+     datetime_separator: '%s',
+     time_separator: '%s'
+    } , { class: 'date-select'} ),'年 ', '月 ', '日 ', '時 ') + '分'%>
   </div>
 
-  <div class="field">
-    <%= form.label :end_time %>
-    <%= form.datetime_select :end_time %>
-  </div>
 
   <div class="field">
-    <%= form.hidden_field :user_id %>
+      <%= form.label :user_id %>
+    <%= form.number_field :user_id %>
   </div>
 
   <div class="field">
@@ -31,14 +33,18 @@
   </div>
 
 
-  <% @rooms.each do |room| %>
+  <% @rooms&.each do |room| %>
     <%= room.name %>
-    <% if room.id == @room_id&.room_id then %>
+    <% if room.id == @user&.room_id then %>
       <%= check_box_tag 'room_ids[]', room.id, checked:true -%>
     <% else %>
       <%= check_box_tag 'room_ids[]', room.id -%>
     <% end %>
   <% end %>
+  <p></p>
+  <%= label_tag :sample, '毎週' -%>
+  <%= check_box_tag :sample %>
+ 
 
   <div class="actions">
     <%= form.submit %>

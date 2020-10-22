@@ -11,18 +11,9 @@ class RoomsController < ApplicationController
   # GET /rooms/1.json
   def show
     
-    # @schedules = Schedule.all
-    # @schedules.each do |schedule|
-    #   print("===========")
-    #   print(schedule.start_time.hour)
-    # end
 
-    @users = User.joins(:relations, :schedule).select('users.name, relations.room_id, schedules.*').where(relations: { room_id: params[:id] })
+
     
-    @users.each do |user|
-        user.start_time = Time.parse(user.start_time).hour 
-        user.end_time = Time.parse(user.end_time).hour  
-    end
       
 
     
