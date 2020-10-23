@@ -41,9 +41,16 @@
       <%= check_box_tag 'room_ids[]', room.id -%>
     <% end %>
   <% end %>
+
   <p></p>
-  <%= label_tag :sample, '毎週' -%>
-  <%= check_box_tag :sample %>
+    <%= label_tag :sample, '毎週' -%>
+    <% if !@clone_id.nil? then %>
+      <%= check_box_tag :is_copy, @clone_id, checked:true-%>
+    <% else %>
+      <%= check_box_tag :is_copy,  @clone_id -%>
+    <% end %>
+ 
+  
  
 
   <div class="actions">
