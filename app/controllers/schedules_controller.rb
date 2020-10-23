@@ -15,13 +15,16 @@ class SchedulesController < ApplicationController
 
   # GET /schedules/new
   def new
+                                                 
     id = Profile.find_by(:user_id => current_user.id).id
     @schedule = Schedule.new({"user_id" => id})
     @rooms = Room.all
+    @clone_id = params[:is_copy]
   end
 
   # GET /schedules/1/edit
   def edit
+    @clone_id = params[:is_copy]
     @rooms = Room.all
     @user = Schedule.find_by(:user_id => current_user.id)
     user = Profile.find_by(:user_id => current_user.id)
@@ -34,18 +37,44 @@ class SchedulesController < ApplicationController
   # POST /schedules.json
   def create
     @schedule = Schedule.new(schedule_params)
-    @schedule["room_id"] = params[:room_ids][0]
-    # ここからfor文を回して複数個のレコードの作成を行う
-    respond_to do |format|
-      if @schedule.save
-        format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
-        format.json { render :show, status: :created, location: @schedule }
-      else
-        format.html { render :new }
-        format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    @schedule = Schedule.find_or_create_by(:start_time => @schedule.start_time,:user_id => @schedule.user_id, :room_id => @schedule.room_id)
+    @schedule.clone_id = @schedule.id
+    @schedule.room_id = params[:room_ids][0]
+    @schedule.save 
+    date = @schedule.start_time
+    
+    schedule_dates =[]
+    # 複数のレコードの作成
+  
+   if !params[:is_copy].nil?
+      old_schedules = Schedule.where(:user_id => @schedule.user_id, :room_id => @schedule.room_id)
+      3.times do |i| 
+      date = date.since(7.days)
+      if old_schedules.any?{|v| v.start_time == date } == false  
+        s = Schedule.new(:start_time => date,:user_id => @schedule.user_id, :room_id => @schedule.room_id)
+        s.clone_id = @schedule.id
+        schedule_dates << s
       end
     end
+  end
+   
+    Schedule.import schedule_dates
 
+    redirect_to @schedule
+    # @schedule = Schedule.new(schedule_params)
+    # @schedule["room_id"] = params[:room_ids][0]
+    # @schedule["clone_id"] = schedule_id
+    # # ここからfor文を回して複数個のレコードの作成を行う
+    # respond_to do |format|
+    #   if @schedule.save
+    #     format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
+    #     format.json { render :show, status: :created, location: @schedule }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    #   end
+    # end
+   
     
   end
 
@@ -54,8 +83,6 @@ class SchedulesController < ApplicationController
 
 
   def update
-    params[:schedule]["room_id"] = params[:room_ids][0]
-    print(@schedule.start_time.since(7.days))
     respond_to do |format|
       if !params[:room_ids].nil? 
         @schedule.update(schedule_params)
