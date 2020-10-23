@@ -83,16 +83,40 @@ class SchedulesController < ApplicationController
 
 
   def update
-    respond_to do |format|
-      if !params[:room_ids].nil? 
-        @schedule.update(schedule_params)
-        format.html { redirect_to @schedule, notice: 'Schedule was successfully updated.' }
-        format.json { render :show, status: :ok, location: @schedule }
-      else
-        format.html { redirect_to edit_schedule_url(@schedule) }
-        format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    @schedule.update(schedule_params)
+
+    schedule_dates =[]
+    # 複数のレコードの作成
+   date = @schedule.start_time
+   if !params[:is_copy].nil?
+      old_schedules = Schedule.where(:user_id => @schedule.user_id, :room_id => @schedule.room_id)
+      3.times do |i| 
+      date = date.since(7.days)
+      if old_schedules.any?{|v| v.start_time == date } == false  
+        s = Schedule.new(:start_time => date,:user_id => @schedule.user_id, :room_id => @schedule.room_id)
+        s.clone_id = @schedule.id
+        schedule_dates << s
       end
     end
+  end
+   
+    Schedule.import schedule_dates
+
+    redirect_to @schedule
+
+
+
+
+    # respond_to do |format|
+    #   if !params[:room_ids].nil? 
+    #     @schedule.update(schedule_params)
+    #     format.html { redirect_to @schedule, notice: 'Schedule was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @schedule }
+    #   else
+    #     format.html { redirect_to edit_schedule_url(@schedule) }
+    #     format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /schedules/1
