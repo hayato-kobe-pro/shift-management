@@ -10,13 +10,27 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    this_day = Date.today
+    this_monday = this_day - (this_day.wday - 1) # 今週の月曜日
+ 
+    #  @users = User.joins(:schedule).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).where(users: {'name LIKE ?', "%na%"}) 
+     
     
+     
+    # schedules = Schedule.where('start_time LIKE ?', "%#{this_monday}%")
+
+    # users.each do |user|
+    #   print("===========")
+    #   print(user.start_time)
+    # end
 
 
     
-      
-
-    
+  #   @users.each do |user|
+  #     user.start_time = Time.parse(user.start_time).hour 
+  #     print("===========")
+  #     print(user.name)
+  # end
 
 
   end
