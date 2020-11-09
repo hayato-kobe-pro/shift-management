@@ -1,3 +1,4 @@
+
 <%= form_with(model: schedule, local: true) do |form| %>
   <% if schedule.errors.any? %>
     <div id="error_explanation">
@@ -12,32 +13,34 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :start_time %>
+    <h5 class="pt-4" style="border-bottom: double 5px #FFC778;">時間帯<h5>
+    <h6>
     <%= raw sprintf(form.datetime_select( :start_time ,{:use_month_numbers  => true,
     minute_step: 10,
      date_separator: '%s',
      datetime_separator: '%s',
      time_separator: '%s'
     } , { class: 'date-select'} ),'年 ', '月 ', '日 ', '時 ') + '分'%>
+    </h6>
   </div>
 
 
   <div class="field">
-      <%= form.label :user_id %>
-    <%= form.number_field :user_id %>
+    <%= form.hidden_field :user_id %>
   </div>
 
   <div class="field">
-    <%= form.label :clone_id %>
+  
     <%= form.hidden_field :clone_id %>
   </div>
 
   <div class="field">
-    <%= form.label :room_id %>
-    <%= form.number_field :room_id %>
+
+    <%= form.hidden_field :room_id %>
   </div>
 
-
+<h5 class="pt-4" style="border-bottom: double 5px #FFC778;">教室<h5>
+    <h6>
   <% @rooms&.each do |room| %>
     <%= room.name %>
     <% if room.id == @user&.room_id then %>
@@ -45,6 +48,7 @@
     <% else %>
       <%= check_box_tag 'room_ids[]', room.id -%>
     <% end %>
+    <a>　　</a>
   <% end %>
 
   <p></p>
@@ -56,7 +60,7 @@
     <% end %>
  
   
- 
+  <p></p>
 
   <div class="actions">
     <%= form.submit %>
