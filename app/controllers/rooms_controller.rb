@@ -12,18 +12,29 @@ class RoomsController < ApplicationController
   def show
     this_day = Date.today
     this_monday = this_day - (this_day.wday - 1) # 今週の月曜日
+    this_wednesday = this_day - (this_day.wday - 3)
+    this_friday =  this_day - (this_day.wday - 5)
+
+    # orで3曜日分の配列を取得
+    @schedules = User.joins(:schedule).select('users.name,schedules.*').where(schedules: { room_id: params[:id] })
+    table = @schedules.where('start_time LIKE ?', "%#{this_monday}%").or(@schedules.where('start_time LIKE ?', "%#{this_wednesday}%")).or(@schedules.where('start_time LIKE ?', "%#{this_friday}%"))
+
     
+  
+
     @date = []
     for num in 1..3 do
      @date.push(this_monday)
      this_monday = this_monday.since(2.days)
     end
 
-    this_monday = this_day - (this_day.wday - 1) # 今週の月曜日 
- 
-     @users = User.joins(:schedule).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).where('start_time LIKE ?', "%#{this_monday}%")
+
     
-      @names = Schedule.joins(:user).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).distinct.pluck(:name)
+    @names = Schedule.joins(:user).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).distinct.pluck(:name)
+
+    
+
+
 
     # @schedules = Schedule.where('start_time LIKE ?', "%#{this_monday}%")
 
@@ -85,7 +96,7 @@ class RoomsController < ApplicationController
     end
   end
 
-  private
+  private 
 
   # Use callbacks to share common setup or constraints between actions.
   def set_room
