@@ -1,5 +1,5 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:show, :edit, :update, :destroy]
+  before_action :set_room, only: [:edit, :update, :destroy]
 
   # GET /rooms
   # GET /rooms.json
@@ -10,41 +10,44 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
-    this_day = Date.today
-    this_monday = this_day - (this_day.wday - 1) # 今週の月曜日
-    this_wednesday = this_day - (this_day.wday - 3)
-    this_friday =  this_day - (this_day.wday - 5)
+    @room = Room.find(params[:id])
 
-    # orで3曜日分の配列を取得
-    @schedules = User.joins(:schedule).select('users.name,schedules.*').where(schedules: { room_id: params[:id] })
-    table = @schedules.where('start_time LIKE ?', "%#{this_monday}%").or(@schedules.where('start_time LIKE ?', "%#{this_wednesday}%")).or(@schedules.where('start_time LIKE ?', "%#{this_friday}%"))
+    today = DateTime.current
+    this_monday = today - (today.wday - 1) # 今週の月曜日
+    next_monday = this_monday.since(7.days)
 
-    
+    @schedules = Schedule.joins(:user).select('users.*,schedules.*').where("start_time >= ? AND start_time < ?", this_monday, next_monday).where(:room_id => params[:id])
+
+
+    @users = @schedules.map{|schedule| schedule.user}.uniq
+   
+    @start_times = @schedules.map{|schedule| schedule.start_time}.uniq.sort { |a,b|  (a) <=> (b) }
   
-
-    @date = []
+    @dates = []
     for num in 1..3 do
-     @date.push(this_monday)
+     @dates.push(this_monday)
      this_monday = this_monday.since(2.days)
     end
 
+    
+    # this_day = Date.today
+    # this_monday = this_day - (this_day.wday - 1) # 今週の月曜日
+    # this_wednesday = this_day - (this_day.wday - 3)
+    # this_friday =  this_day - (this_day.wday - 5)
+
+    # # orで3曜日分の配列を取得
+    # @schedules = User.joins(:schedule).select('users.name,schedules.*').where(schedules: { room_id: params[:id] })
+    # table = @schedules.where('start_time LIKE ?', "%#{this_monday}%").or(@schedules.where('start_time LIKE ?', "%#{this_wednesday}%")).or(@schedules.where('start_time LIKE ?', "%#{this_friday}%"))
+
+    # @date = []
+    # for num in 1..3 do
+    #  @date.push(this_monday)
+    #  this_monday = this_monday.since(2.days)
+    # end
+    # @names = Schedule.joins(:user).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).distinct.pluck(:name)
 
     
-    @names = Schedule.joins(:user).select('users.name,schedules.*').where(schedules: { room_id: params[:id] }).distinct.pluck(:name)
 
-    
-
-
-
-    # @schedules = Schedule.where('start_time LIKE ?', "%#{this_monday}%")
-
-
-    
-  #   @users.each do |user|
-  #     user.start_time = Time.parse(user.start_time).hour 
-  #     print("===========")
-  #     print(user.name)
-  # end
 
   end
 
