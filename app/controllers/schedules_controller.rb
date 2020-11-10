@@ -124,8 +124,12 @@ class SchedulesController < ApplicationController
   def destroy
     @schedule.destroy
     respond_to do |format|
+      if !params[:room_id].nil?
+        format.html { redirect_to room_url(params[:room_id]), notice: 'Schedule was successfully destroyed.' }
+      else
       format.html { redirect_to schedules_url, notice: 'Schedule was successfully destroyed.' }
       format.json { head :no_content }
+      end
     end
   end
 
