@@ -34,9 +34,10 @@
       <button type="button" class="btn btn-light w-100" data-toggle="modal" data-target="#exampleModal"
       onclick="open_dialog('<%= start_time %>')">
       <% schedule =  @schedules.find{ |schedule| schedule.user_id == user.id && schedule.start_time == start_time } %>
+      
       <% if nil != schedule %>
-        <p>◯</p>
-        <%# <%= link_to 'Destroy',room_schedule_url(schedule.room_id, schedule), method: :delete %>
+        <p class="pt-3">◯</p>
+      <%= link_to  '',room_schedule_url(schedule.room_id, schedule), method: :delete , id:"sample"%> 
       <%else%>
         <p>　</p>
       <% end %>
@@ -56,8 +57,10 @@
       <div id="date-break" >
           <h5></h5>
       </div>
-        <button type="button" class="btn btn-danger" onclick="remove_shift()">削除</button>
+        <%# <button type="button" class="btn btn-danger" onclick="remove_shift()">削除</button> %>
         <%# deleteメソッドを使う %>
+
+          <a class="btn btn-danger"  id="remove-shift" rel="nofollow" data-method="delete" href="">削除</a> 
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -66,27 +69,31 @@
 
 
 
+
+
 </div>
 
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-import axios from 'axios';
- async function open_dialog(str) {
+
+ async function open_dialog(date) {
   var element = document.getElementById('date-break');
-  element.innerText = str
-  console.log(data)
+  element.innerText = date
+  let href = document.getElementById('sample').href  
+  console.log(href)
+  let link = document.getElementById('remove-shift')
+  link.href = href
 } 
-
-var remove_shift = function()
-{
-  
-}
-
-
  
 </script>
+
+
+
+
+
 
 
