@@ -1,7 +1,8 @@
 class SchedulesController < ApplicationController
   before_action :set_schedule, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
 
+  before_action :authenticate_user!
+  protect_from_forgery except: :delete
   # GET /schedules
   # GET /schedules.json
   def index
@@ -15,8 +16,11 @@ class SchedulesController < ApplicationController
 
   # GET /schedules/new
   def new
-                                                 
     id = Profile.find_by(:user_id => current_user.id).id
+
+    print("===========")
+    print(id)
+
     @schedule = Schedule.new({"user_id" => id})
     @rooms = Room.all
     @clone_id = params[:is_copy]
